@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#set timeout -1
+
+#$(date +%m-%d-%Y)
+
+
+
+
+cd /home/respaldo-bx-db01/$(date +%m-%d-%Y)/
+
+ulimit -n 10000
+
+gpg --yes -r F42E4C6E --encrypt-files ./*.gz
+
+rm -rf ./*.gz
+

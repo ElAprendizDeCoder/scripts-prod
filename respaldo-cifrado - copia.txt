@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+
+set timeout -1
+
+set DATE [exec date +%m-%d-%Y]
+
+
+spawn scp -r Admin:/volume1/respaldos/bx-db01/Nuevo-respaldo-migracion/$DATE/ /home/respaldo-bx-db01/
+
+
+expect "password:"
+sleep .2
+send "password"
+expect eof
+

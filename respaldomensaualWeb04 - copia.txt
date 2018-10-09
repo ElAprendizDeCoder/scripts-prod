@@ -1,0 +1,45 @@
+#!/bin/bash
+
+
+#script para mover los aarchivos de un mes
+# Ejemplo si el nombre es del mes de junio
+# El respaldo es de mayo a junio
+# El respaldo se manda la NAS montada en /mnt/respaldo
+
+# Inicio de log inicio de copia y creaciónde directorio
+
+
+date >> /var/log/backupMensual/backup-mensual.log
+echo "Inicio de Copia" >> /var/log/backupMensual/backup-mensual.log
+
+DEST_FOLDER=$(date --date '-82 day' '+%y-%m-%d')
+mkdir /$DEST_FOLDER
+
+cd /var/www/html/operaciones.broxel.com/operaciones/files
+
+touch -d $(date --date '-72 day' '+%y-%m-%d') begin
+touch -d $(date --date '-82 day' '+%y-%m-%d') end
+
+find . -newer begin -a ! -newer end -exec mv -t /$DEST_FOLDER/ {} +;
+
+rm -f /$DEST_FOLDER/end
+
+
+cd /
+
+gzip /$DEST_FOLDER/*
+
+mount -a
+
+
+mkdir /mnt/respaldo/$DEST_FOLDER
+
+
+rsync -aru /$DEST_FOLDER/ /mnt/respaldo/$DEST_FOLDER
+#spawn scp -rf /$DEST_FOLDER/ admin@192.168.75.13:/volume1/NAS02/Servidores/web04/files/
+
+date
+
+date >> /var/log/backupMensual/backup-mensual.log
+echo "Fin de Copia" >> /var/log/backupMensual/backup-mensual.log
+

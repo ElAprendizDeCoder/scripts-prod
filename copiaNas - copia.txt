@@ -1,0 +1,13 @@
+#!/usr/bin/expect
+
+set timeout -1
+
+set DATE [exec date +%m-%d-%Y]
+
+
+spawn scp -r /mnt/mysqlbackup/backup-broxelco_rdg/$DATE/ Admin@192.168.75.11:/volume1/respaldos/bx-db01/Nuevo-respaldo-migracion/
+
+expect "password:"
+sleep .2
+send "password"
+expect eof

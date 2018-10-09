@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Unsupported script to copy files (mysql tables)
+# Ticket 180307-13747
+date
+
+date >> /var/log/backup_tables/backup-tables.log
+echo "Inicio de Copia" >> /var/log/backup_tables/backup-tables.log
+
+DEST_FOLDER=/mnt/mysqlbackup/backup-broxelco_rdg/$(date +%m-%d-%Y)
+mkdir $DEST_FOLDER
+/bin/cp -f --preserve /mnt/mysqldata/mysql/broxelco_rdg/*.{frm,ibd,MYD,MYI} $DEST_FOLDER
+
+gzip $DEST_FOLDER/*
+
+date
+
+date >> /var/log/backup_tables/backup-tables.log
+echo "Fin de Copia" >> /var/log/backup_tables/backup-tables.log
+echo >> /var/log/backup_tables/backup-tables.log
